@@ -1,0 +1,22 @@
+{
+  "name": "sustainable-ai-design",
+  "version": "1.0.0",
+  "description": "AI-based sustainable design and planning system",
+  "type": "module",
+  "scripts": {
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && pip install -r requirements.txt",
+    "build": "cd frontend && npm run build",
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "backend:dev": "cd backend && python app.py",
+    "frontend:dev": "cd frontend && npm run dev",
+    "prod-build": "npm run build && echo 'Build complete'",
+    "start": "cd backend && gunicorn --workers 4 --worker-class sync --bind 0.0.0.0:$PORT app:app"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "pg": "^8.18.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  }
+}
