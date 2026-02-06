@@ -33,6 +33,8 @@ const Dashboard = ({ user, onLogout }) => {
   const [clearingHistory, setClearingHistory] = useState(false);
   const [mlRankings, setMlRankings] = useState(null);
   const [prefSaved, setPrefSaved] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [showTemplates, setShowTemplates] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [favorites, setFavorites] = useState([]);
@@ -64,6 +66,41 @@ const Dashboard = ({ user, onLogout }) => {
       setFavorites(JSON.parse(saved));
     }
   }, []);
+
+  useEffect(() => {
+    let scrollTimeout;
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Show header if at top
+      if (currentScrollY < 10) {
+        setShowHeader(true);
+        setLastScrollY(currentScrollY);
+        return;
+      }
+      
+      // Hide on scroll down, show on scroll up
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setShowHeader(false);
+      } else if (currentScrollY < lastScrollY) {
+        setShowHeader(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+      
+      // Auto-show after idle
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        setShowHeader(true);
+      }, 2000);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, [lastScrollY]);
 
   useKeyboardShortcuts({
     onGenerate: () => {
@@ -372,7 +409,8 @@ const Dashboard = ({ user, onLogout }) => {
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={{ opacity: showHeader ? 1 : 0, y: showHeader ? 0 : -100 }}
+        transition={{ duration: 0.3 }}
         className="bg-dark-panel/95 border-b border-dark-border sticky top-0 z-50 backdrop-blur-md shadow-2xl"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
