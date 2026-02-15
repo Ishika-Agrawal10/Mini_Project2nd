@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Dashboard from './pages/Dashboard'
 import Auth from './pages/Auth'
 import Intro from './pages/Intro'
+import Welcome from './pages/Welcome'
 import './index.css'
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
   const [isIntro, setIsIntro] = useState(true)
   const [isAuthLoading, setIsAuthLoading] = useState(false)
   const [isTransitionLoading, setIsTransitionLoading] = useState(false)
+  const [showWelcome, setShowWelcome] = useState(false)
   const [transitionCopy, setTransitionCopy] = useState({
     title: 'Preparing workspace...',
     subtitle: 'Loading secure session',
@@ -49,6 +51,11 @@ function App() {
     if (stored) {
       setUser(JSON.parse(stored))
       setIsIntro(false)
+      // Show welcome screen on app restart if user is logged in
+      const welcomeShown = sessionStorage.getItem('welcome-shown')
+      if (!welcomeShown) {
+        setShowWelcome(true)
+      }
     }
     const timer = setTimeout(() => setIsSplash(false), 1400)
     return () => clearTimeout(timer)
@@ -61,6 +68,8 @@ function App() {
       setUser(userData)
       localStorage.setItem('sustainable-user', JSON.stringify(userData))
       setIsTransitionLoading(false)
+      // Show welcome screen after successful login
+      setShowWelcome(true)
     }, 900)
   }
 
@@ -85,10 +94,17 @@ function App() {
     setIsTransitionLoading(true)
     setTimeout(() => {
       localStorage.removeItem('sustainable-user')
+      sessionStorage.removeItem('welcome-shown')
       setUser(null)
       setIsIntro(true)
       setIsTransitionLoading(false)
+      setShowWelcome(false)
     }, 900)
+  }
+
+  const handleWelcomeContinue = () => {
+    sessionStorage.setItem('welcome-shown', 'true')
+    setShowWelcome(false)
   }
 
   if (isSplash) {
@@ -177,6 +193,10 @@ function App() {
 
   if (!user) {
     return <Auth onContinue={handleContinue} onBackToIntro={handleBackToIntro} />
+  }
+
+  if (showWelcome) {
+    return <Welcome user={user} onContinue={handleWelcomeContinue} />
   }
 
   return <Dashboard user={user} onLogout={handleLogout} />
