@@ -358,26 +358,6 @@ Weighted average of energy and water scores:
 
 ---
 
-## Academic Value Proposition
-
-This project demonstrates:
-- **Problem Understanding**: Clear sustainable design challenges
-- **Solution Design**: Systematic approach to AI-assisted design
-- **Technical Implementation**: Full-stack development excellence
-- **Explainability**: Transparent, rule-based logic
-- **Evaluation**: Metrics, visualization, decision support
-- **Scalability**: Modular, API-ready architecture
-
-### Viva Discussion Points
-- How constraints map to design parameters
-- Why text-based designs are academically appropriate
-- How to extend with real LLM integration
-- Cost-benefit of different evaluation methods
-- User study implications
-- Sustainability metric limitations
-
----
-
 ## Future Extensions (Post-Academic)
 
 1. **Real LLM Integration**
@@ -543,18 +523,10 @@ For questions about this project:
 
 ---
 
-## Academic Integrity
-
-This project is designed for educational purposes and academic evaluation. All code is original work demonstrating:
-- Full-stack web development capability
-- AI integration concepts
-- Sustainable design knowledge
-- Software architecture principles
-
 The mock AI generation is intentionally simplified to focus on the decision-support framework. Real LLM integration would follow the same API patterns.
 
 ---
 
-## License
+### Deployed on Render
+https://sus-ds.onrender.com
 
-Academic Use Only - 2026
